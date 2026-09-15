@@ -88,9 +88,7 @@ public class DiagnosticRepositoryImpl implements DiagnosticRepository {
         }
 
         String where  = clauses.isEmpty() ? "" : " WHERE " + String.join(" AND ", clauses);
-        // Use long arithmetic — both operands are ints so the product fits in a long with no overflow risk.
-        // The service layer already rejects any (page * size) > 1_000_000_000 before reaching here.
-        long   offset = (long) pageRequest.panachePage() * pageRequest.size();
+        int    offset = Math.multiplyExact(pageRequest.panachePage(), pageRequest.size());
 
         String dataSql = "SELECT d.* FROM diagnostics d"
             + " JOIN alerts a ON d.alert_id = a.id"

@@ -145,8 +145,11 @@ public final class ApiConstants {
             /** Default number of items returned per page when {@code page_size} is omitted. */
             public static final String DEFAULT_PAGE_SIZE = "20";
 
-            /** Hard upper cap — requests above this are rejected with HTTP 400. */
+            /** Hard upper cap on page_size — requests above this are rejected with HTTP 400. */
             public static final int MAX_PAGE_SIZE = 100;
+
+            /** Hard upper cap on page — requests above this are rejected with HTTP 400. */
+            public static final int MAX_PAGE = 10_000;
         }
 
     }
