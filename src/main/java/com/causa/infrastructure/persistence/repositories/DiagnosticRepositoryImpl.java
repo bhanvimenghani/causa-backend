@@ -78,7 +78,8 @@ public class DiagnosticRepositoryImpl implements DiagnosticRepository {
         List<Object> params  = new ArrayList<>();
 
         if (hasContainer) {
-            clauses.add("a.workload_info->>'container_name' = ?" + (params.size() + 1));
+            // Mirror AlertEntityMapper.toDomain() fallback: container_name from JSONB, else workload_name column
+            clauses.add("COALESCE(a.workload_info->>'container_name', a.workload_name) = ?" + (params.size() + 1));
             params.add(filter.container());
         }
         if (hasNamespace) {
@@ -87,7 +88,9 @@ public class DiagnosticRepositoryImpl implements DiagnosticRepository {
         }
 
         String where  = clauses.isEmpty() ? "" : " WHERE " + String.join(" AND ", clauses);
-        int    offset = Math.multiplyExact(pageRequest.panachePage(), pageRequest.size());
+        // Use long arithmetic — both operands are ints so the product fits in a long with no overflow risk.
+        // The service layer already rejects any (page * size) > 1_000_000_000 before reaching here.
+        long   offset = (long) pageRequest.panachePage() * pageRequest.size();
 
         String dataSql = "SELECT d.* FROM diagnostics d"
             + " JOIN alerts a ON d.alert_id = a.id"

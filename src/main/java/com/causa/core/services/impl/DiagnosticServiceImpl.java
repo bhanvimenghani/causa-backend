@@ -880,6 +880,11 @@ public class DiagnosticServiceImpl implements DiagnosticService {
                 "page_size must be between 1 and " + ApiConstants.Paths.Pagination.MAX_PAGE_SIZE);
         }
         int page = pageRequest.page() <= 0 ? 1 : pageRequest.page();
+        // Guard against offset overflow: page * size must fit in a long-safe range.
+        // MAX_PAGE_SIZE=100, so max safe page = Long.MAX_VALUE / 100 ≈ 9.2 * 10^16 — cap at 10^9 for sanity.
+        if ((long) page * size > 1_000_000_000L) {
+            throw new InvalidPaginationException("page value is too large");
+        }
         return diagnosticRepository.search(filter, PageRequest.of(page, size));
     }
 
