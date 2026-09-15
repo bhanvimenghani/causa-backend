@@ -13,6 +13,7 @@ import com.causa.core.domain.PageResult;
 import com.causa.core.ports.AlertRepository;
 import com.causa.core.services.DiagnosticService;
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -62,8 +63,8 @@ public class DiagnosticsController {
     public Response listDiagnostics(
             @QueryParam(ApiConstants.Paths.Pagination.QUERY_PAGE)      @DefaultValue("1")                                              int page,
             @QueryParam(ApiConstants.Paths.Pagination.QUERY_PAGE_SIZE) @DefaultValue(ApiConstants.Paths.Pagination.DEFAULT_PAGE_SIZE) int pageSize,
-            @QueryParam(ApiConstants.Paths.Diagnostics.QUERY_CONTAINER)                    String container,
-            @QueryParam(ApiConstants.Paths.Diagnostics.QUERY_NAMESPACE)                    String namespace) {
+            @QueryParam(ApiConstants.Paths.Diagnostics.QUERY_CONTAINER) @Size(max = 255) String container,
+            @QueryParam(ApiConstants.Paths.Diagnostics.QUERY_NAMESPACE) @Size(max = 255) String namespace) {
 
         log.info(LogMessages.Diagnostic.DIAGNOSTICS_LIST_REQUEST)
             .field("page", page)

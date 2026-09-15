@@ -24,10 +24,10 @@ public interface DiagnosticRepository {
 
     /**
      * Returns all diagnostics ordered by {@code created_at} descending, paginated
-     * according to {@code pageRequest}.
+     * according to {@code pageRequest}, optionally filtered by container and/or namespace.
      *
+     * @param filter      optional container/namespace filter; use {@link Diagnostic.Filter#empty()} for no filtering
      * @param pageRequest page and size
-     * @param filter 
      * @return a paginated result containing diagnostics and total count
      */
     PageResult<Diagnostic> search(Diagnostic.Filter filter, PageRequest pageRequest);

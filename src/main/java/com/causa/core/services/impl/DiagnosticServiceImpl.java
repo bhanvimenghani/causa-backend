@@ -874,7 +874,6 @@ public class DiagnosticServiceImpl implements DiagnosticService {
 
     @Override
     public PageResult<Diagnostic> listDiagnostics(Diagnostic.Filter filter, PageRequest pageRequest) {
-        
         int size = pageRequest.size() <= 0 ? Integer.parseInt(ApiConstants.Paths.Pagination.DEFAULT_PAGE_SIZE) : pageRequest.size();
         if (size > ApiConstants.Paths.Pagination.MAX_PAGE_SIZE) {
             throw new InvalidPaginationException(

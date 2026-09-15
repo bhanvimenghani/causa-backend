@@ -17,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -149,6 +150,32 @@ class DiagnosticsControllerTest {
 
             verify(alertRepository).findById("alert-1");
             verify(alertRepository).findById("alert-2");
+        }
+
+        @Test
+        @DisplayName("Should pass namespace filter to service")
+        void shouldPassNamespaceFilterToService() {
+            PageResult<Diagnostic> page = PageResult.of(List.of(), 0L, PageRequest.of(1, 20));
+            ArgumentCaptor<Diagnostic.Filter> filterCaptor = ArgumentCaptor.forClass(Diagnostic.Filter.class);
+            when(diagnosticService.listDiagnostics(filterCaptor.capture(), any())).thenReturn(page);
+
+            controller.listDiagnostics(1, 20, null, "prod");
+
+            assertEquals("prod", filterCaptor.getValue().namespace());
+            assertNull(filterCaptor.getValue().container());
+        }
+
+        @Test
+        @DisplayName("Should pass container filter to service")
+        void shouldPassContainerFilterToService() {
+            PageResult<Diagnostic> page = PageResult.of(List.of(), 0L, PageRequest.of(1, 20));
+            ArgumentCaptor<Diagnostic.Filter> filterCaptor = ArgumentCaptor.forClass(Diagnostic.Filter.class);
+            when(diagnosticService.listDiagnostics(filterCaptor.capture(), any())).thenReturn(page);
+
+            controller.listDiagnostics(1, 20, "my-app", null);
+
+            assertEquals("my-app", filterCaptor.getValue().container());
+            assertNull(filterCaptor.getValue().namespace());
         }
     }
 
