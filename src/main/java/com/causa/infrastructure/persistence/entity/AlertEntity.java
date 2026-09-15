@@ -2,6 +2,7 @@ package com.causa.infrastructure.persistence.entity;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -64,6 +65,21 @@ public class AlertEntity extends BaseEntity {
     private String workloadName;
 
     /**
+     * Namespace extracted from {@code workload_info} JSONB for JPQL filtering.
+     * Read-only — not persisted. Maps to {@code workload_info->>'namespace'}.
+     */
+    @Formula("workload_info->>'namespace'")
+    private String namespace;
+
+    /**
+     * Container name for JPQL filtering — mirrors {@link com.causa.infrastructure.persistence.mappers.AlertEntityMapper}
+     * fallback: {@code workload_info->>'container_name'} if present, else {@code workload_name}.
+     * Read-only — not persisted.
+     */
+    @Formula("COALESCE(workload_info->>'container_name', workload_name)")
+    private String containerName;
+
+    /**
      * alert_metadata JSONB.
      * Shape: {@code { "labels": {...}, "annotations": {...}, "alert_source": "prometheus" }}
      */
@@ -111,6 +127,9 @@ public class AlertEntity extends BaseEntity {
 
     public String getWorkloadName() { return workloadName; }
     public void setWorkloadName(String v) { this.workloadName = v; }
+
+    public String getNamespace() { return namespace; }
+    public String getContainerName() { return containerName; }
 
     public JsonNode getAlertMetadata() { return alertMetadata; }
     public void setAlertMetadata(JsonNode alertMetadata) { this.alertMetadata = alertMetadata; }
