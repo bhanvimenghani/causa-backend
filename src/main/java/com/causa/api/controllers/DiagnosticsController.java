@@ -63,7 +63,7 @@ public class DiagnosticsController {
     public Response listDiagnostics(
             @QueryParam(ApiConstants.Paths.Pagination.QUERY_PAGE)      @DefaultValue("1")                                              int page,
             @QueryParam(ApiConstants.Paths.Pagination.QUERY_PAGE_SIZE) @DefaultValue(ApiConstants.Paths.Pagination.DEFAULT_PAGE_SIZE) int pageSize,
-            @QueryParam(ApiConstants.Paths.Diagnostics.QUERY_WORKLOAD)  @Size(max = 255) String workload,
+            @QueryParam(ApiConstants.Paths.Diagnostics.QUERY_WORKLOAD)  @Size(max = 255) String workloadName,
             @QueryParam(ApiConstants.Paths.Diagnostics.QUERY_NAMESPACE) @Size(max = 255) String namespace) {
 
         log.info(LogMessages.Diagnostic.DIAGNOSTICS_LIST_REQUEST)
@@ -71,7 +71,7 @@ public class DiagnosticsController {
             .field("page_size", pageSize)
             .log();
 
-        Diagnostic.Filter filter = new Diagnostic.Filter(workload, namespace);
+        Diagnostic.Filter filter = new Diagnostic.Filter(workloadName, namespace);
         PageResult<Diagnostic> result = diagnosticService.listDiagnostics(filter, PageRequest.of(page, pageSize));
 
         List<DiagnosticListItemResponse> items = result.items().stream()

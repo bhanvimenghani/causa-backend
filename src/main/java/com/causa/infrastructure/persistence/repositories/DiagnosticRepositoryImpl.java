@@ -65,9 +65,10 @@ public class DiagnosticRepositoryImpl implements DiagnosticRepository {
 
     /** Paginated search ordered by {@code created_at} descending, with optional workload/namespace filters. */
     @Override
+    @Transactional
     public PageResult<Diagnostic> search(Diagnostic.Filter filter, PageRequest pageRequest) {
-        boolean hasWorkload   = !isBlank(filter.workload());
-        boolean hasNamespace  = !isBlank(filter.namespace());
+        boolean hasWorkload   = filter != null && !isBlank(filter.workload());
+        boolean hasNamespace  = filter != null && !isBlank(filter.namespace());
 
         Sort sort = Sort.by("createdAt").descending();
         Page page = Page.of(pageRequest.panachePage(), pageRequest.size());
