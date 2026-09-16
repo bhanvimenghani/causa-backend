@@ -78,8 +78,8 @@ public final class Diagnostic {
      * to the {@code alerts} table.
      */
     public record Filter(
-            /** Exact match on {@code workload_info->>'container_name'} (JSONB via alerts JOIN). Null/blank → skip. */
-            String container,
+            /** Exact match on {@code workload_name} column (container name for k8s, workload name for VM). Null/blank → skip. */
+            String workload,
             /** Exact match on {@code workload_info->>'namespace'} (JSONB via alerts JOIN). Null/blank → skip. */
             String namespace
     ) {
@@ -87,7 +87,7 @@ public final class Diagnostic {
         public static Filter empty() { return new Filter(null, null); }
 
         /** Returns {@code true} when every field is null or blank. */
-        public boolean isEmpty() { return isBlank(container) && isBlank(namespace); }
+        public boolean isEmpty() { return isBlank(workload) && isBlank(namespace); }
 
         private static boolean isBlank(String s) { return s == null || s.isBlank(); }
     }

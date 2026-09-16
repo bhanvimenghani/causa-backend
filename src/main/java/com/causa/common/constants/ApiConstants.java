@@ -100,7 +100,7 @@ public final class ApiConstants {
             public static final String PATH_PARAM = "id";
             public static final String BY_ID      = "/{" + PATH_PARAM + "}";
             public static final String QUERY_NAMESPACE = "namespace";
-            public static final String QUERY_CONTAINER = "container";
+            public static final String QUERY_WORKLOAD  = "workload";
         }
 
         /**
@@ -147,9 +147,6 @@ public final class ApiConstants {
 
             /** Hard upper cap on page_size — requests above this are rejected with HTTP 400. */
             public static final int MAX_PAGE_SIZE = 100;
-
-            /** Hard upper cap on page — requests above this are rejected with HTTP 400. */
-            public static final int MAX_PAGE = 10_000;
         }
 
     }

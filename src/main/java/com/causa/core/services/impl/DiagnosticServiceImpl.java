@@ -880,10 +880,6 @@ public class DiagnosticServiceImpl implements DiagnosticService {
                 "page_size must be between 1 and " + ApiConstants.Paths.Pagination.MAX_PAGE_SIZE);
         }
         int page = pageRequest.page() <= 0 ? 1 : pageRequest.page();
-        if (page > ApiConstants.Paths.Pagination.MAX_PAGE) {
-            throw new InvalidPaginationException(
-                "page must be between 1 and " + ApiConstants.Paths.Pagination.MAX_PAGE);
-        }
         return diagnosticRepository.search(filter, PageRequest.of(page, size));
     }
 

@@ -63,22 +63,22 @@ public class DiagnosticRepositoryImpl implements DiagnosticRepository {
             .map(DiagnosticEntityMapper::toDomain);
     }
 
-    /** Paginated search ordered by {@code created_at} descending, with optional container/namespace filters. */
+    /** Paginated search ordered by {@code created_at} descending, with optional workload/namespace filters. */
     @Override
     public PageResult<Diagnostic> search(Diagnostic.Filter filter, PageRequest pageRequest) {
-        boolean hasContainer = !isBlank(filter.container());
-        boolean hasNamespace = !isBlank(filter.namespace());
+        boolean hasWorkload   = !isBlank(filter.workload());
+        boolean hasNamespace  = !isBlank(filter.namespace());
 
         Sort sort = Sort.by("createdAt").descending();
         Page page = Page.of(pageRequest.panachePage(), pageRequest.size());
 
         io.quarkus.hibernate.orm.panache.PanacheQuery<DiagnosticEntity> query;
 
-        if (hasContainer && hasNamespace) {
-            query = DiagnosticEntity.find("alert.containerName = ?1 and alert.namespace = ?2",
-                sort, filter.container(), filter.namespace());
-        } else if (hasContainer) {
-            query = DiagnosticEntity.find("alert.containerName = ?1", sort, filter.container());
+        if (hasWorkload && hasNamespace) {
+            query = DiagnosticEntity.find("alert.workloadName = ?1 and alert.namespace = ?2",
+                sort, filter.workload(), filter.namespace());
+        } else if (hasWorkload) {
+            query = DiagnosticEntity.find("alert.workloadName = ?1", sort, filter.workload());
         } else if (hasNamespace) {
             query = DiagnosticEntity.find("alert.namespace = ?1", sort, filter.namespace());
         } else {

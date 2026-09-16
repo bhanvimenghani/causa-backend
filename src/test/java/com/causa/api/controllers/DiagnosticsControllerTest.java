@@ -162,19 +162,19 @@ class DiagnosticsControllerTest {
             controller.listDiagnostics(1, 20, null, "prod");
 
             assertEquals("prod", filterCaptor.getValue().namespace());
-            assertNull(filterCaptor.getValue().container());
+            assertNull(filterCaptor.getValue().workload());
         }
 
         @Test
-        @DisplayName("Should pass container filter to service")
-        void shouldPassContainerFilterToService() {
+        @DisplayName("Should pass workload filter to service")
+        void shouldPassWorkloadFilterToService() {
             PageResult<Diagnostic> page = PageResult.of(List.of(), 0L, PageRequest.of(1, 20));
             ArgumentCaptor<Diagnostic.Filter> filterCaptor = ArgumentCaptor.forClass(Diagnostic.Filter.class);
             when(diagnosticService.listDiagnostics(filterCaptor.capture(), any())).thenReturn(page);
 
             controller.listDiagnostics(1, 20, "my-app", null);
 
-            assertEquals("my-app", filterCaptor.getValue().container());
+            assertEquals("my-app", filterCaptor.getValue().workload());
             assertNull(filterCaptor.getValue().namespace());
         }
     }
