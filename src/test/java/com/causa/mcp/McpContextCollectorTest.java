@@ -6,6 +6,7 @@ import com.causa.common.constants.AlertConstants.AlertStatus;
 import com.causa.config.McpConfig;
 import com.causa.core.domain.Alert;
 import com.causa.core.domain.DiagnosticContext;
+import com.causa.mcp.util.LibertyLogsContextCollector;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -33,7 +34,6 @@ class McpContextCollectorTest {
     @Mock McpConfig mcpConfig;
     @Mock McpConfig.KubernetesConfig k8sConfig;
     @Mock McpConfig.KruizeConfig kruizeConfig;
-    @Mock McpConfig.CryostatConfig cryostatConfig;
     @Mock McpConfig.QuarkusConfig quarkusConfig;
     @Mock McpConfig.AsyncProfilerConfig asyncProfilerConfig;
     @Mock McpConfig.JmxConfig jmxConfig;
@@ -71,12 +71,6 @@ class McpContextCollectorTest {
             when(mcpConfig.kruize()).thenReturn(kruizeConfig);
             when(kruizeConfig.endpoint()).thenReturn("http://192.0.2.1");
             when(kruizeConfig.timeoutMs()).thenReturn(1);
-
-            when(mcpConfig.cryostat()).thenReturn(cryostatConfig);
-            when(cryostatConfig.endpoint()).thenReturn("http://192.0.2.1");
-            when(cryostatConfig.timeoutMs()).thenReturn(1);
-            when(cryostatConfig.maxRetries()).thenReturn(0);
-            when(cryostatConfig.retryDelayMs()).thenReturn(1);
 
             when(mcpConfig.quarkus()).thenReturn(quarkusConfig);
             when(quarkusConfig.endpoint()).thenReturn(Optional.of("http://192.0.2.1"));
@@ -260,7 +254,7 @@ class McpContextCollectorTest {
         }
 
         @Test
-        @DisplayName("alert with no pod name skips k8s + cryostat calls")
+        @DisplayName("alert with no pod name skips kubernetes calls")
         void noPodName_skipsKubernetesAndCryostat() {
             Alert alertNoPod = Alert.builder()
                 .alertId("alrt_nopod000000001")
@@ -271,7 +265,7 @@ class McpContextCollectorTest {
                 .workloadName("container-1")
                 .build();
 
-            // Should complete without exception and skip k8s/cryostat paths
+            // Should complete without exception and skip kubernetes calls
             assertThatCode(() -> collector.collectContext(alertNoPod)).doesNotThrowAnyException();
         }
 
@@ -357,11 +351,6 @@ class McpContextCollectorTest {
             when(mcpConfig.kruize()).thenReturn(kruizeConfig);
             when(kruizeConfig.endpoint()).thenReturn("http://192.0.2.1");
             when(kruizeConfig.timeoutMs()).thenReturn(1);
-            when(mcpConfig.cryostat()).thenReturn(cryostatConfig);
-            when(cryostatConfig.endpoint()).thenReturn("http://192.0.2.1");
-            when(cryostatConfig.timeoutMs()).thenReturn(1);
-            when(cryostatConfig.maxRetries()).thenReturn(0);
-            when(cryostatConfig.retryDelayMs()).thenReturn(1);
 
             when(mcpConfig.quarkus()).thenReturn(quarkusConfig);
             when(quarkusConfig.endpoint()).thenReturn(Optional.of("http://192.0.2.1"));

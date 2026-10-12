@@ -118,7 +118,8 @@ public final class LogMessages {
         public static final String LLM_CHECK_STARTED = "LLM health check started";
         public static final String LLM_CHECK_PASSED = "LLM health check passed";
         public static final String LLM_CHECK_FAILED = "LLM health check failed";
-    }     
+        public static final String MCP_CONFIG_NOT_INITIALIZED = "MCP configuration not initialized";
+    }
     
     /**
      * Alert ingestion log messages.
@@ -224,16 +225,6 @@ public final class LogMessages {
         public static final String MCP_ASYNC_PROFILER_FLAME_GRAPH  = "Async Profiler flame graph retrieved";
         public static final String MCP_ASYNC_PROFILER_NO_RECORDING = "Async Profiler: no latestRecordingId — skipping recording tools";
 
-        // Cryostat MCP
-        public static final String MCP_CRYOSTAT_GC_ANALYSIS = "Cryostat GC analysis retrieved";
-        public static final String MCP_CRYOSTAT_MEMORY_ANALYSIS = "Cryostat memory analysis retrieved";
-        public static final String MCP_CRYOSTAT_THREAD_ANALYSIS = "Cryostat thread analysis retrieved";
-        public static final String MCP_CRYOSTAT_EXCEPTION_ANALYSIS = "Cryostat exception analysis retrieved";
-        public static final String MCP_CRYOSTAT_CONTAINER_ANALYSIS = "Cryostat container analysis retrieved";
-        public static final String MCP_CRYOSTAT_RECORDING_CREATED = "Cryostat recording created, waiting for retry";
-        public static final String MCP_CRYOSTAT_RETRY = "Retrying Cryostat tool call";
-        public static final String MCP_CRYOSTAT_MAX_RETRIES = "Cryostat max retries exceeded";
-
         // Context collection completion
         public static final String MCP_CONTEXT_COLLECTION_COMPLETE = "MCP context collection completed";
 
@@ -323,6 +314,20 @@ public final class LogMessages {
         public static final String ASSERTION_BATCH_COMPLETED = "Batch analysis completed";
         public static final String ASSERTION_SKIP_RECOMMENDATION = "Recommendations are not validated against evidence";
         public static final String ASSERTION_NO_JSON = "No JSON object found in LLM response";
+
+        // Rule Engine (PATH B)
+        public static final String PATH_B_RUNNING = "PATH B: Running rule-based hypothesis validation";
+        public static final String PATH_B_SIGNAL_EXTRACTED = "PATH B Signal extracted";
+        public static final String RULE_EVALUATED = "Rule evaluated";
+        public static final String RULE_EVALUATION_ERROR = "Rule evaluation failed";
+        public static final String RULESET_LOADED = "Loaded ruleset from YAML";
+        public static final String RULESET_FILE_NOT_FOUND = "Ruleset file not found";
+        public static final String RULESET_LOAD_FAILED = "Failed to load ruleset";
+        public static final String VALIDATION_COMPLETED = "Rule-based validation completed";
+        public static final String NO_RULESET_EXPLANATION_PREFIX = "No ruleset available for anomaly type: ";
+
+        // Signal Extractor
+        public static final String EMPTY_DIAGNOSTIC_CONTEXT = "Empty diagnostic context, no signals to extract";
     }
 
     /**

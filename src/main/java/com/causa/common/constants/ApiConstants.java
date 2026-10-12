@@ -116,17 +116,49 @@ public final class ApiConstants {
 
         /**
          * Configuration management API.
+         *
+         * <p>Generic key-value configs:
          * GET  /api/v1/configs              — list all configs (optional ?category filter)
          * GET  /api/v1/configs/{key}        — single config by key
          * POST /api/v1/configs              — upsert config values
+         *
+         * <p>Observability platform configs:
+         * GET    /api/v1/configs/observability                      — list all observability configs
+         * PUT    /api/v1/configs/observability/{platform}           — upsert observability config
+         * DELETE /api/v1/configs/observability/{platform}/{name}    — delete observability config
+         *
+         * <p>LLM provider configs:
+         * GET    /api/v1/configs/llm                                — list all LLM provider configs
+         * PUT    /api/v1/configs/llm/{provider}                     — upsert LLM provider config
+         * DELETE /api/v1/configs/llm/{provider}                     — delete LLM provider config
+         *
+         * <p>Integration platform configs:
+         * GET    /api/v1/configs/integrations                       — list all integration configs
+         * PUT    /api/v1/configs/integrations/{platform}            — upsert integration config
+         * DELETE /api/v1/configs/integrations/{platform}/{name}     — delete integration config
          */
         public static final class Configs {
             private Configs() {}
 
             public static final String BASE = Version.API_V1 + "/configs";
+
+            // Generic key-value params
             public static final String PATH_PARAM_KEY = "key";
-            public static final String BY_KEY = "/{" + PATH_PARAM_KEY + "}";
+            public static final String BY_KEY         = "/{" + PATH_PARAM_KEY + "}";
             public static final String QUERY_CATEGORY = "category";
+
+            // Sub-resource segments
+            public static final String OBSERVABILITY_SEGMENT = "/observability";
+            public static final String LLM_SEGMENT           = "/llm";
+            public static final String INTEGRATIONS_SEGMENT  = "/integrations";
+
+            // Path params for sub-resources
+            public static final String PATH_PARAM_PLATFORM = "platform";
+            public static final String PATH_PARAM_PROVIDER = "provider";
+
+            public static final String BY_PLATFORM          = "/{" + PATH_PARAM_PLATFORM + "}";
+            public static final String BY_PROVIDER          = "/{" + PATH_PARAM_PROVIDER + "}";
+            public static final String BY_PLATFORM_AND_NAME = "/{" + PATH_PARAM_PLATFORM + "}/{name}";
         }
 
         /**
